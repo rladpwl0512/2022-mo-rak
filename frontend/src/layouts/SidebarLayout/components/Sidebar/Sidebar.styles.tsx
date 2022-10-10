@@ -1,7 +1,20 @@
 import styled from '@emotion/styled';
 
-const StyledContainer = styled.div(
-  ({ theme }) => `
+const StyledHamburgerMenu = styled.button`
+  display: none;
+  position: fixed;
+  top: 4rem;
+  left: 4rem;
+
+  @media (max-width: 700px) {
+    display: block;
+  }
+`;
+
+const StyledContainer = styled.div<{
+  isVisible: boolean;
+}>(
+  ({ isVisible, theme }) => `
   position: sticky;
   top: 0;
   width: 36.4rem;
@@ -10,8 +23,25 @@ const StyledContainer = styled.div(
   background: ${theme.colors.WHITE_100};
   padding-left: 4rem;
   gap: 2rem;
+  
+  @media (max-width: 700px) {
+    display: ${isVisible ? 'block' : 'none'};
+    position: absolute;
+    width: 100vw;
+  }
 `
 );
+
+const StyledCloseButton = styled.button`
+  display: none;
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+
+  @media (max-width: 700px) {
+    display: block;
+  }
+`;
 
 const StyledLogo = styled.img`
   display: block;
@@ -30,4 +60,4 @@ const StyledBottomMenu = styled.div`
   gap: 2rem;
 `;
 
-export { StyledContainer, StyledLogo, StyledBottomMenu };
+export { StyledHamburgerMenu, StyledContainer, StyledLogo, StyledBottomMenu, StyledCloseButton };

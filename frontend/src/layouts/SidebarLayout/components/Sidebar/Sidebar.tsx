@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Logo from '../../../../assets/logo.svg';
+import HamburgerMenu from '../../../../assets/hamburger-menu.svg';
+import CloseButton from '../../../../assets/close-button.svg';
 
 import { getGroups } from '../../../../api/group';
 import { GroupInterface } from '../../../../types/group';
@@ -14,12 +16,19 @@ import SidebarFeatureMenu from '../SidebarFeatureMenu/SidebarFeatureMenu';
 import SidebarInvitationMenu from '../SidebarInvitationMenu/SidebarInvitationMenu';
 import SidebarSlackMenu from '../SidebarSlackMenu/SidebarSlackMenu';
 import SidebarLogoutMenu from '../SidebarLogoutMenu/SidebarLogoutMenu';
-import { StyledContainer, StyledLogo, StyledBottomMenu } from './Sidebar.styles';
+import {
+  StyledHamburgerMenu,
+  StyledContainer,
+  StyledLogo,
+  StyledBottomMenu,
+  StyledCloseButton
+} from './Sidebar.styles';
 
 function Sidebar() {
   const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState<Array<GroupInterface>>([]);
   const [activeModalMenu, setActiveModalMenu] = useState<null | string>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const { groupCode } = useParams() as { groupCode: GroupInterface['code'] };
 
@@ -31,6 +40,14 @@ function Sidebar() {
 
   const handleActiveModalMenu = (menu: null | string) => () => {
     setActiveModalMenu(menu);
+  };
+
+  const handleOpenMenu = () => {
+    setIsVisible(true);
+  };
+
+  const handleCloseMenu = () => {
+    setIsVisible(false);
   };
 
   useEffect(() => {
@@ -50,12 +67,19 @@ function Sidebar() {
 
   return (
     <>
-      <StyledContainer>
+      <StyledHamburgerMenu onClick={handleOpenMenu}>
+        <img src={HamburgerMenu} alt="메뉴" />
+      </StyledHamburgerMenu>
+
+      <StyledContainer isVisible={isVisible}>
         {isLoading ? (
           <div>로딩중</div>
         ) : (
           <>
             <StyledLogo src={Logo} alt={Logo} onClick={handleNavigate(`/groups/${groupCode}`)} />
+            <StyledCloseButton onClick={handleCloseMenu}>
+              <img src={CloseButton} alt="메뉴닫기" />
+            </StyledCloseButton>
             <SidebarGroupsMenu
               onClickMenu={handleActiveModalMenu}
               groupCode={groupCode}
